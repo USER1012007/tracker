@@ -1,0 +1,19 @@
+rootProject.buildFileName = "/dev/null"
+
+def engineShortRev = "a10d8ac38de835021c8d2f920dbf50a920ccc030"
+def dir = new File("$System.env.HOME/.cache/flutter/nix-flutter-tools-gradle/$engineShortRev")
+dir.mkdirs()
+def file = new File(dir, "settings.gradle")
+
+file.text = """
+rootProject.projectDir = new File("$settingsDir")
+apply from: new File("$settingsDir/settings.gradle.kts")
+
+gradle.allprojects { project ->
+  project.beforeEvaluate {
+    project.layout.buildDirectory = new File("$dir/build")
+  }
+}
+"""
+
+includeBuild(dir)
